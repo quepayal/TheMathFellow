@@ -1,0 +1,16 @@
+{
+    "honkit": ">= 3.0.0",
+    "root": "./",
+    "title": "The Math Fellow",
+    "plugins": [
+      "mathjax@https://github.com/algorithm-archivists/plugin-mathjax"
+    ],
+    "lunr": {
+      "maxIndexSize": 1000000000
+    },
+    "pluginsConfig": {
+      "mathjax": {
+        "version": "2.6.1"
+      }
+    }
+  }

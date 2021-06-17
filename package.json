@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "gitbook-plugin-mathjax": "git+https://github.com/algorithm-archivists/plugin-mathjax.git",
     "honkit": "^3.6.20"
   },
   "scripts": {
