@@ -1,0 +1,354 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>Intuition and Mathematical Proof of The Bias-Variance Trade-Off · The Math Fellow</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 3.6.20">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="../../" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.2" data-path="bias-Variance-Tradeoff.html">
+            
+                <a href="bias-Variance-Tradeoff.html">
+            
+                    
+                    Intuition and Mathematical Proof of The Bias-Variance Trade-Off
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >Intuition and Mathematical Proof of The Bias-Variance Trade-Off</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="intuition-and-mathematical-proof-of-the-bias-variance-trade-off">Intuition and Mathematical Proof of The Bias-Variance Trade-Off</h1>
+<p>Assessing the model’s accuracy is one of the most crucial things while determining the model that’s best suited for a particular dataset and a problem. By which I mean we need to determine how close the predictions made are to the actual observed values.</p>
+<h3 id="terminology">Terminology</h3>
+<p>In general, for a particular problem, for an observed quantitative response <script type="math/tex; "> Y </script> and <script type="math/tex; "> p </script> different predictors/features, we define the relationship between <script type="math/tex; "> Y </script> and Vector <script type="math/tex; "> X </script> :</p>
+<p><script type="math/tex; "> Y = f(X) + \epsilon </script></p>
+<p>Accordingly, regarding estimation, <script type="math/tex; "> \hat f </script> represents our estimation for <script type="math/tex; "> f </script> that on a set of Predictors <script type="math/tex; "> X </script> yields <script type="math/tex; "> \hat Y </script> that represents the resulting prediction for <script type="math/tex; "> Y </script>.</p>
+<p><script type="math/tex; "> \hat Y = \hat f(X) </script></p>
+<p><script type="math/tex; "> f(x) </script> is some fixed but unknown function of the Vector <script type="math/tex; "> X </script>. Generally, <script type="math/tex; "> Y </script> has a non-deterministic relationship. It is also a function of <script type="math/tex; "> \epsilon </script> which cannot be predicted using <script type="math/tex; "> X </script> and, in the term, is the irreducible error. Think about <script type="math/tex; "> \epsilon </script> as some low impact or unmeasurable feature, which is essentially a random error term. It’s synonymous with Gaussian noise, henceforth has zero mean. That is,</p>
+<p><script type="math/tex; "> {\mathbb{E}} [\epsilon] = 0, var(\epsilon) = \sigma_\epsilon^2 = {\mathbb{E}} [\epsilon^2] - {\mathbb{E}} [\epsilon]^2 = {\mathbb{E}} [\epsilon^2] </script></p>
+<p>In regression settings, we examine the loss using the <strong>Squared Loss function</strong> for one of the instances: the square of the difference between the actual observed value and the Predicted value.</p>
+<p>Averaging the Squared Loss per instance over the whole dataset gives us the <strong>Mean Squared Error</strong> (MSE). That is,</p>
+<p><script type="math/tex; "> MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat f(x_i))^2 = {\mathbb{E}} [(y - \hat f(x))^2] </script></p>
+<p><strong>Bias</strong> refers to the error that is inherently introduced by simplifying the assumptions used in the model for better interpretability at the cost of flexibility for the otherwise highly complicated real-life problem. It’s defined as the difference between the Expected value of Prediction <script type="math/tex; "> \hat f(x) </script> to the Actual Observed value <script type="math/tex; "> f(x) </script> for a given unseen test data point. That is,</p>
+<p><script type="math/tex; "> bias[\hat f(x)] = {\mathbb{E}} [\hat f(x)] - f(x) </script></p>
+<p><strong>Variance</strong> represents the quantitative amount by which a random variable differs from its expected value. When we change the training dataset for a highly flexible model, then because of overfitting, the estimated Prediction function <script type="math/tex; "> \hat f(x) </script> changes drastically. Whereas for learning algorithms like linear regression, logistics regression, the variance is quite low. And also, <script type="math/tex; "> \hat f(x) </script> is essentially estimated over a particular training dataset. Hence different training data would result in different <script type="math/tex; "> \hat f(x) </script>. Over the range of different training datasets, the Expected squared deviation of <script type="math/tex; "> \hat f(x) </script> from its expected value <script type="math/tex; "> {\mathbb{E}} [\hat f(x)] </script> is the Variance. That is,</p>
+<p><script type="math/tex; "> var(\hat f(x)) = {\mathbb{E}} [(\hat f(x) - {\mathbb{E}} [\hat f(x)])^2] </script></p>
+<p>This brings us to the infamous <strong>Bias-Variance trade-off</strong> resulting from two competing properties of Statistical Learning methods. Accordingly, as evident by the equation to the Expected Test MSE for a given data point <script type="math/tex; "> x </script>, comprises of the variance of <script type="math/tex; "> \hat f(x) </script>, the squared bias of <script type="math/tex; "> \hat f(x) </script>, and the variance of the error term <script type="math/tex; "> \epsilon </script>. That is,</p>
+<p><script type="math/tex; "> {\mathbb{E}} [(y - \hat f(x))^2] = var(\hat f(x)) + [bias[\hat f(x)]]^2 + var(\epsilon) </script></p>
+<p>This equation tells that to minimize the Expected Test MSE, and we need a statistical method that simultaneously achieves <em>low variance</em> and <em>low bias</em>. Also, as the variance is an inherently nonnegative quantity, and squared bias is also nonnegative. Hence Expected Test MSE would always stay above <script type="math/tex; "> Var(\epsilon) </script>.</p>
+<h3 id="mathematical-proof">Mathematical Proof</h3>
+<p>Expected Prediction Error, <script type="math/tex; "> {\mathbb{E}} [(y - \hat f(x))^2] </script> of a regression fit <script type="math/tex; "> \hat f(x) </script> at input data point <script type="math/tex; "> X = x </script> using MSE is —</p>
+<p><script type="math/tex; "> 
+    \begin{equation} \label{eq1}
+        \begin{split}
+            MSE & = {\mathbb{E}} [(y - \hat f(x))^2 | X = x] \\
+                & = {\mathbb{E}} [(y - \hat f(x))^2] = {\mathbb{E}} [(f(x) + \epsilon - \hat f(x))^2] \\
+                & = {\mathbb{E} [(f(x) - \hat f(x))^2] + {\mathbb{E}} [\epsilon^2]} + 2{\mathbb{E}} [(f(x) - \hat f(x)) \epsilon] \\
+                & = {\mathbb{E} [(f(x) - \hat f(x))^2] + {\mathbb{E}} [\epsilon^2]} + 2{\mathbb{E}} [(f(x) - \hat f(x))] {\mathbb{E}} [\epsilon] \\
+                & = {\mathbb{E}} [(f(x) - \hat f(x))^2] + \sigma_\epsilon^2 \\
+        \end{split}
+    \end{equation}
+</script></p>
+<p>Taken from Alecos Papadopoulos <a href="https://stats.stackexchange.com/questions/366220/predictor-and-error-are-independent" target="_blank">StackExchange</a></p>
+<p>Recall that <script type="math/tex; "> \hat f(x) </script> is the predictor function we have constructed based on m data points. <script type="math/tex; "> (x^{(1)}, y^{(1)}), …, (x^{(m)}, y^{(m)}) </script>.</p>
+<p>On the other hand, <script type="math/tex; "> Y </script> is the prediction we are making on a new data point using the model constructed on the m data points above.
+<script type="math/tex; "> (x^{(m+1)}, y^{(m+1)}) </script>.</p>
+<p>The assumptions that we have for the new data point is that —</p>
+<ul>
+<li>It was <strong>not</strong> used while constructing <script type="math/tex; "> \hat f(x) </script></li>
+<li>It is independent of all the previous training data points</li>
+<li>And it&apos;s independent of <script type="math/tex; "> \epsilon^{m+1} </script>.</li>
+</ul>
+<p>Hence we can conclude that <script type="math/tex; "> \hat f(x) </script> and <script type="math/tex; "> \epsilon </script> are independent random variables.</p>
+<p>Further expanding <script type="math/tex; "> {\mathbb{E}} [(f(x) - \hat f(x))^2] </script> term.</p>
+<p><script type="math/tex; "> 
+    \begin{equation} \label{eq2}
+        \begin{split}
+            {\mathbb{E}} [(f(x) - \hat f(x))^2] 
+            & = {\mathbb{E}} [(f(x) + {\mathbb{E}} [\hat f(x)] - {\mathbb{E}} [\hat f(x)] - \hat f(x))^2] \\
+            & = {\mathbb{E}} [({\mathbb{E}} [\hat f(x)] - f(x))^2] + {\mathbb{E}} [(\hat f(x) - {\mathbb{E}} [\hat f(x)])^2] - 2 {\mathbb{E}} [(f(x) - {\mathbb{E}} [\hat f(x)])] (\hat f(x) - {\mathbb{E}} [\hat f(x)]) \\
+            & = \underbrace{ 
+                ({\mathbb{E}} [\hat f(x)] - f(x))^2}_\text{bias[f^(x)]} + \underbrace{
+                {\mathbb{E}} [(\hat f(x) - {\mathbb{E}} [\hat f(x)])]^2}_\text{variance[f^(x)]} - 2 {\mathbb{E}} [(f(x) - {\mathbb{E}} [\hat f(x)])] ({\mathbb{E}} [\hat f(x)] - {\mathbb{E}} [\hat f(x)]) \\
+            & = bias[\hat f(x)] + variance[\hat f(x)] \\
+        \end{split}
+    \end{equation}
+</script></p>
+<p><script type="math/tex; "> {\mathbb{E}}[\hat f(x)] </script> and <script type="math/tex; "> f(x) </script> both are constant. Hence there difference that is, <script type="math/tex; "> Bias {\mathbb{E}} [\hat f(x)] − f(x) </script> is just a constant. Therefore, applying expectation to squared bias, <script type="math/tex; "> ({\mathbb{E}} [\hat f(x)] − f(x))^2 </script> does not have any effect.</p>
+<p>Hence, <script type="math/tex; "> {\mathbb{E}} [({\mathbb{E}} [\hat f(x)] - f(x))^2] = ({\mathbb{E}} [\hat f(x)] - f(x))^2 </script></p>
+<p>Therefore combining the above three equations we get,</p>
+<p><script type="math/tex; "> {\mathbb{E}}[(y - \hat f(x))^2] = var(\hat f(x)) + [bias(\hat f(x))]^2 + var(\epsilon) </script></p>
+<p>This is actually an interesting equation, and to find an appropriate model for our dataset, we’ve to strike a balance between those two competing properties — <em>Bias</em> and <em>Variance</em>.</p>
+<h3 id="references">References</h3>
+<ul>
+<li><p><a href="https://stats.stackexchange.com/questions/204115/understanding-bias-variance-tradeoff-derivation/354284#354284" target="_blank">StackExchange</a></p>
+</li>
+<li><p><a href="https://towardsdatascience.com/the-bias-variance-tradeoff-8818f41e39e9" target="_blank">Towards Data Science</a></p>
+</li>
+<li><p><a href="https://www.statlearning.com/" target="_blank">StatLearning</a></p>
+</li>
+</ul>
+<script> MathJax.Hub.Queue(["Typeset",MathJax.Hub]); </script>
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="../../" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Introduction">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Intuition and Mathematical Proof of The Bias-Variance Trade-Off","level":"1.2","depth":1,"previous":{"title":"Introduction","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["mathjax@https://github.com/algorithm-archivists/plugin-mathjax"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"mathjax":{"forceSVG":false,"version":"2.6.1"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","lunr":{"maxIndexSize":1000000000},"honkit":">= 3.0.0","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"The Math Fellow","gitbook":"*"},"file":{"path":"contents/stats/bias-Variance-Tradeoff.md","mtime":"2021-06-17T02:01:03.346Z","type":"markdown"},"gitbook":{"version":"3.6.20","time":"2021-06-17T02:01:17.249Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-mathjax/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
