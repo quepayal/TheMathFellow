@@ -1,0 +1,8 @@
+## Dependency directory
+node_modules
+
+# npm package lock for local installs
+package-lock.json
+
+# Book build output
+_book
